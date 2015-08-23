@@ -1,0 +1,99 @@
+1. у ларченко написано, что в команде call nn сначала выполняется pc=nn, затем перенос значения в стек ???? почему ????
+2. INI,INIR,IND,INDR,OUTI,OTIR,OUTD,OTDR В этих командах я забил на P/V флаг. надо бы сделать.
+3. Непонятка. HL=65BF DE=AC14 SBC HL,DE дает в Unreal Sz5H3pNC, у меня Sz5H3PNC
+4. У Ларченко написано P - переполнение, устанавливается при изменении знака операнда. надо сделать так.
+5. сделать z80 файлы для чтения
+6. sna файлы пока не учитывают у меня возможность trdos
+7. сделать trdos. план-минимум - трэпы.
+8. сделать клавиатуру
+9. я нигде не проверяю ошибки. ЭТО ЛАМЕРСТВО
+10. рассмотреть вариант перевода экрана в режим 4bpp. Т.е. использование палитры. В принципе должно увеличить скорость.
+11. возможно проблема: смена страницы из пзу (tr-dos отрубится)
+12. пресконфигурированные лошадки при старте эмуля. (желательно, настройка, создание новых)
+13. Спасиба авторам инфы: Бульбе,Павлу Федину...
+
+prefix  		opcode  	mnemo
+		
++ no,no,no		00 000 000	NOP
++ no,no,no		00 001 000	EX AF,AF'
++ no,no,no		00 010 000	DJNZ e
++ no,no,no		00 011 000	JR e
++ no,no,no		00 1ss 000	JR ss,e
++ no,DD,FD		00 dd0 001	LD dd (HL->IX,IY) ,nn
++ no,DD,FD		00 ss1 001	ADD HL(IX,IY),ss (HL->IX,IY)
++ no,no,no		00 000 010	LD (BC),A
++ no,no,no		00 001 010	LD A,(BC)
++ no,no,no		00 010 010	LD (DE),A
++ no,no,no		00 011 010	LD A,(DE)
++ no,DD,FD		00 100 010	LD (nn), HL(IX,IY)
++ no,DD,FD		00 101 010	LD HL(IX,IY) ,(nn)
++ no,no,no		00 110 010	LD (nn),A
++ no,no,no		00 111 010	LD A,(nn)
++ no,DD,FD		00 ss0 011	INC ss
++ no,DD,FD		00 ss1 011	DEC ss
++ no,DD,FD		00 -r- 100	INC r (H,L->Ixh,ixl,iyh,iyl, (HL)->(IX,IY+d))
++ no,DD,FD		00 -r- 101	DEC r
++ no,DD,FD		00 -r- 110	LD r,n (HL->IX,IY+d)
++ no,no,no		00 0RR 111	RLCA, RRCA, RLA, RRA
++ no,no,no		00 100 111	DAA
++ no,no,no		00 101 111	CPL
++ no,no,no		00 111 111	CCF
++ no,no,no		00 110 111	SCF
++ CB,DDCB,FDCB	00 RRR -r-	RLC,RL,RRC,RR,SLA,SLL,SRA,SRL
+
++ no,DD,FD		01 -r- -r'-	LD r,r'
++ no,DD,FD		01 -r- 110	LD r,(HL) или (IX+d) или (IY+d)
++ no,DD,FD		01 110 -r-	LD (HL),r или (IX+d) или (IY+d)
++ no,no,no		01 110 110	HALT
++ CB,DDCB,FDCB	01 -b- -r-	BIT b,r ((HL)->(IX+d,IY+d)
++ ED,no,no		01 -r- 000	IN r,(C)
++ ED,no,no		01 -r- 001	OUT (C),r
++ ED,no,no		01 ss0 010	SBC HL,ss
++ ED,no,no		01 ss1 010	ADC HL,ss
++ ED,no,no		01 dd0 011	LD (nn),dd
++ ED,no,no		01 dd1 011	LD dd,(nn)
++ ED,no,no		01 xxx 100	NEG
++ ED,no,no		01 001 101	RETI
++ ED,no,no		01 xxx 101	RETN
++ ED,no,no		01 x0x 110	IM 0
++ ED,no,no		01 x10 110	IM 1
++ ED,no,no		01 x11 110	IM 2
++ ED,no,no		01 000 111	LD I,A
++ ED,no,no		01 001 111	LD R,A
++ ED,no,no		01 010 111	LD A,I
++ ED,no,no		01 011 111	LD A,R
++ ED,no,no		01 100 111	RRD
++ ED,no,no		01 101 111	RLD
++ ED,no,no		01 11x 111	NOP
+
++ no,DD,FD		10 AAA -r-	ADD,ADC,SUB,SBC,AND,OR,XOR,CP
++ CB,DDCB,FDCB	10 -b- -r-	RES b,r
++ ED,no,no		10 1LL 000	LDI,LDIR,LDD,LDDR
++ ED,no,no		10 1CC 001	CPI,CPIR,CPD,CPDR
++ ED,no,no		10 1IN 010	INI,INIR,IND,INDR
++ ED,no,no		10 1OU 011	OUTI,OTIR,OUTD,OTDR
+
++ no,no,no		11 ccc 000	RET ccc
++ no,DD,FD		11 qq0 001	POP qq (HL->IX,IY)
++ no,no,no		11 001 001	RET
++ no,no,no		11 011 001	EXX
++ no,DD,FD		11 101 001	JP HL (IX,IY)
++ no,DD,FD		11 111 001	LD SP,HL (IX,IY)
++ no,no,no		11 ccc 010	JP ccc,nn
++ no,no,no		11 000 011	JP nn
++ no,no,no		11 001 011	prefix CB
++ no,no,no		11 010 011	OUT (n),A
++ no,no,no		11 011 011	IN A,(n)
++ no,DD,FD		11 100 011	EX (SP),HL(IX,IY)
++ no,no,no		11 101 011	EX DE,HL
++ no,no,no		11 110 011	DI
++ no,no,no		11 111 011	EI
++ no,no,no		11 ccc 100	CALL ccc,nn
++ no,DD,FD		11 qq0 101	PUSH qq (HL->IX,IY)
++ no,no,no		11 001 101	CALL nn
++ no,no,no		11 011 101	prefix DD
++ no,no,no		11 101 101	prefix ED
++ no,no,no		11 111 101	prefix FD
++ no,no,no		11 -t- 111	RST p
++ CB,DDCB,FDCB	11 -b- -r-	SET b,r
++ no,no,no		11 AAA 110	ADD,ADC,SUB,SBC,AND,OR,XOR,CP n

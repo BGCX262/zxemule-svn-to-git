@@ -1,0 +1,25 @@
+/*
+ ============================================================================
+ Name		: zxEmule.hrh
+ Author	  : tsapree
+ Copyright   : (c) tsap 2009
+ Description : This file contains declarations for constants of zxEmule.
+ The file can be included in C++ or resource file.
+ ============================================================================
+ */
+#ifndef __ZXEMULE_HRH__
+#define __ZXEMULE_HRH__
+
+#define _UID3 0xE9368B92
+
+// zxEmule enumerate command codes
+enum TzxEmuleIds
+	{
+	ECommand1 = 0x6001, // start value must not be 0
+	ECommand2,
+	EReset,
+	EHelp,
+	EAbout
+	};
+
+#endif // __ZXEMULE_HRH__

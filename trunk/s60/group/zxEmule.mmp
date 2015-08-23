@@ -1,0 +1,67 @@
+/*
+============================================================================
+ Name		: zxEmule.mmp
+ Author	  : tsapree
+ Copyright   : (c) tsap 2009
+ Description : This is the project specification file for zxEmule.
+============================================================================
+*/
+
+
+TARGET			zxEmule_0xE9368B92.exe
+TARGETTYPE		exe
+UID		  0x100039CE 0xE9368B92
+
+SOURCEPATH		..\src
+SOURCE			zxEmule.cpp
+SOURCE			zxEmuleApplication.cpp
+SOURCE			zxEmuleAppView.cpp
+SOURCE			zxEmuleAppUi.cpp
+SOURCE			zxEmuleDocument.cpp
+
+SOURCEPATH		..\data
+
+START RESOURCE	zxEmule.rss
+HEADER
+TARGET zxEmule_0xE9368B92
+TARGETPATH resource\apps
+END //RESOURCE
+
+START RESOURCE	zxEmule_reg.rss
+TARGET zxEmule_0xE9368B92_reg
+TARGETPATH 	  \private\10003a3f\apps
+END //RESOURCE
+
+
+
+USERINCLUDE	   ..\src
+USERINCLUDE    ..\help ..\inc ..\src\ZxEmulSrc
+
+SYSTEMINCLUDE	 \epoc32\include \epoc32\include\libc
+
+LIBRARY		   euser.lib
+LIBRARY		   apparc.lib
+LIBRARY		   cone.lib
+LIBRARY		   eikcore.lib
+LIBRARY		   avkon.lib
+LIBRARY		   commonengine.lib
+LIBRARY		   efsrv.lib 
+LIBRARY		   estor.lib
+LIBRARY        aknnotify.lib
+LIBRARY        hlplch.lib fbscli.lib bitgdi.lib estlib.lib
+ 
+
+LANG SC
+
+VENDORID	  	  0
+SECUREID		  0xE9368B92
+CAPABILITY	  	  ReadUserData
+
+#ifdef ENABLE_ABIV2_MODE
+DEBUGGABLE_UDEBONLY
+#endif
+// End of File
+SOURCEPATH ..\src
+SOURCE uSystem.cpp uApplication.cpp
+SOURCEPATH ..\src\ZxEmulSrc
+SOURCE TrDos.cpp Z80.cpp zxfiles.cpp
